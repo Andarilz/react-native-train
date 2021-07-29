@@ -8,23 +8,59 @@ import { TodoScreen } from './src/Screens/todoScreen';
 const App = () => {
 
   const [state, setState] = useState([
-    {id: '1', data: 'Выучить react-native'},
-    {id: '2', data: 'Стать синьором в вебе'}
+    // {id: '1', title: 'Выучить react'}
   ])
 
-  const [todoId, setTodoId] = useState('1')
+  const [todoId, setTodoId] = useState(null)
 
-  const handleText = (data) => {
-    if(data){
-      setState([...state, {
-        data, id: Date.now().toString()
+  const handleText = (title) => {
+    if(title){
+      console.log(2)
+      setState(prev => [...prev, {
+        title, id: Date.now().toString()
       }
     ])
     }
   }
 
   const removeTodo = id => {
-    setState(prev => prev.filter(todo => todo.id !== id))
+
+    const todo = state.find(to => to.id === id)
+
+    Alert.alert(
+      "Удаление элемента",
+      `Вы уверены, что хотите удалить ${todo.title}?`,
+      [
+        {
+          text: "Отмена",
+          style: "positive",
+        },
+        {
+          text : 'Удалить', 
+          style: 'negative',
+        onPress: () => {
+          setTodoId(null)
+          setState(prev => prev.filter(todo => todo.id !== id))
+        }
+      }
+      ],
+      {cancelable: false}
+    );
+  }
+
+  const changeTitle = (id, title) => {
+
+    console.log(state)
+
+    setState(old => old.map(todo => {
+      if(todo.id === id){
+        console.log('inf')
+        todo.title = title
+      }
+      return todo
+    }))
+
+    console.log(state)
   }
 
 
@@ -33,7 +69,7 @@ const App = () => {
 
   if(todoId){
     const todo = state.find(todo => todo.id === todoId)
-    content = <TodoScreen goBack={() => setTodoId(null)} todo={todo} removeTodo={removeTodo} />
+    content = <TodoScreen goBack={() => setTodoId(null)} todo={todo} removeTodo={removeTodo} changeTitle={changeTitle} />
   }
 
   return (
