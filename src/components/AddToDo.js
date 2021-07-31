@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
-import {View, StyleSheet, TextInput, Button, Text, Alert} from 'react-native'
+import {View, StyleSheet, TextInput, Button, Text, Alert, Keyboard} from 'react-native'
 import {THEME} from '../theme'
+import {AntDesign} from '@expo/vector-icons'
 
 export const AddToDo = ({handleText}) => {
 
@@ -10,6 +11,7 @@ export const AddToDo = ({handleText}) => {
         if(value.trim()){
             handleText(value)
             setValue('')
+            Keyboard.dismiss() //скрываем клаву
         } else {
             Alert.alert('Введите название дела')
         }
@@ -26,7 +28,8 @@ export const AddToDo = ({handleText}) => {
                 autoCapitalize='none'
                 // keyboardType='number-pad'
                 />
-                <Button title='Добавить' onPress={handleData} />
+                {/* <Button title='Добавить' onPress={handleData} /> */}
+                <AntDesign.Button  onPress={handleData} name='pluscircleo'>Добавить</AntDesign.Button> 
             </View>
     )
 }
@@ -39,7 +42,7 @@ const styles = StyleSheet.create({
         margin: 15
     },
     input: {
-        width: '70%',
+        width: '60%',
         padding: 10,
         borderStyle: 'solid',
         borderBottomWidth: 3,

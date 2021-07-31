@@ -1,9 +1,12 @@
 import React, {useState} from 'react'
-import {StyleSheet, View, Text, Button} from 'react-native'
+import {StyleSheet, View, Text, Button, Dimensions} from 'react-native'
 import { Todo } from '../components/Todo'
 import {THEME} from '../theme'
 import { AppCard } from '../components/UI/AppCard'
 import { EditModal } from '../components/editModal'
+import {AppTextBold} from '../components/UI/AppTextBold'
+import {AppButton} from '../components/UI/AppButton'
+import {AntDesign, FontAwesome} from '@expo/vector-icons'
 
 
 export const TodoScreen = ({goBack, todo, removeTodo, changeTitle}) => {
@@ -23,24 +26,29 @@ export const TodoScreen = ({goBack, todo, removeTodo, changeTitle}) => {
             <EditModal value={todo.title} visible={modal} onCancel={() => setModal(false)} id={todo.id} changeTitle={saveHandler}  />
 
            <AppCard style={styles.card}>
-            <Text style={styles.text}>{title}</Text>
-            <Button title='Ред.' onPress={() => setModal(true)} />
+            <AppTextBold style={styles.text}>{title}</AppTextBold>
+            {/* <Button title='Ред.' onPress={() => setModal(true)} /> */}
+            <AppButton onPress={() => setModal(true)}>
+                <FontAwesome name='edit' size={20} color='#fff' />
+            </AppButton>
            </AppCard>
             <View style={styles.buttons}>
                 <View style={styles.button}>
-                    <Button 
-                    title='Назад' 
+                    <AppButton 
                     onPress={goBack} 
                     color={THEME.grayColor}
-                    />
+                    >
+                        <AntDesign name='back' size={20} color='#fff' />
+                    </AppButton>
                 </View>
                 <View style={styles.button}>
-                    <Button 
-                    title='Удалить' 
+                    <AppButton 
                     color='red' 
                     onPress={() => removeTodo(id)} 
                     color={THEME.dangerColor}
-                    />
+                    >
+                        <FontAwesome name='remove' size={20} color='#fff' />
+                    </AppButton>
                 </View>
             </View>
         </View>
@@ -54,7 +62,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     button: {
-        width: '40%'
+        width: Dimensions.get('window').width / 3
     },
     text: {
         marginRight: 20,
@@ -62,6 +70,7 @@ const styles = StyleSheet.create({
     },
     card: {
         marginBottom: 20,
-        padding: 15
+        padding: 15,
+        justifyContent: 'space-between'
     }
 })

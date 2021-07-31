@@ -17,8 +17,8 @@ export const MainScreen = ({handleText, state, removeTodo, openTodo}) => {
 
     if(state.length === 0){
         content = <View style={styles.imageWrap}>
-            <Image style={styles.image} source={require('../img/Kakashi_Hatake.png')} />
-            {/* <Image style={styles.image} source={{uri: 'https://cdn.saske.tv/uploads/2020/03/kakashi-hotake-saske-tv-315x210.jpg'}} /> */}
+            {/* <Image style={styles.image} source={require('../img/Kakashi_Hatake.png')} /> */}
+            <Image style={styles.image} source={{uri: 'https://c4.wallpaperflare.com/wallpaper/334/432/15/anime-naruto-hokage-naruto-minato-namikaze-wallpaper-preview.jpg'}} />
         </View>
     }
 

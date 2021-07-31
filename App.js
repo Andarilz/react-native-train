@@ -1,9 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Alert, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, View, Alert} from 'react-native';
 import Navbar from './src/components/Navbar';
 import { MainScreen } from './src/Screens/mainScreen';
 import { TodoScreen } from './src/Screens/todoScreen';
+import AppLoading from 'expo-app-loading';
+import * as Font from 'expo-font'
+
+async function loadApplication() {
+  await Font.loadAsync({
+    'roboto-bold': require('./assets/Roboto-Bold.ttf'),
+    'roboto-regular': require('./assets/Roboto-Regular.ttf')
+  })
+}
 
 const App = () => {
 
@@ -13,9 +22,20 @@ const App = () => {
 
   const [todoId, setTodoId] = useState(null)
 
+  const [isReady, setIsReady] = useState(false)
+
+  if (!isReady) {
+    return (
+      <AppLoading
+        startAsync={loadApplication}
+        onError={err => console.log(err)}
+        onFinish={() => setIsReady(true)}
+      />
+    )
+  }
+
   const handleText = (title) => {
     if(title){
-      console.log(2)
       setState(prev => [...prev, {
         title, id: Date.now().toString()
       }
@@ -50,17 +70,12 @@ const App = () => {
 
   const changeTitle = (id, title) => {
 
-    console.log(state)
-
     setState(old => old.map(todo => {
       if(todo.id === id){
-        console.log('inf')
         todo.title = title
       }
       return todo
     }))
-
-    console.log(state)
   }
 
 
@@ -74,7 +89,7 @@ const App = () => {
 
   return (
     <View>
-      <Navbar title={'Todo'} />
+      <Navbar title={'Список дел'} />
       <View style={styles.container}>
         {content}
       </View>
@@ -91,9 +106,3 @@ const styles = StyleSheet.create({
 
 export default App
 
-
-{/* <FlatList
-data={state}
-renderItem={({item}) => <Todo todo={item} />}
-keyExtractor={item => item.id.toString()}
-/> */}
