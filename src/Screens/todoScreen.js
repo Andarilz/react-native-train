@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import {StyleSheet, View, Text, Button, Dimensions} from 'react-native'
 import { Todo } from '../components/Todo'
 import {THEME} from '../theme'
@@ -7,35 +7,60 @@ import { EditModal } from '../components/editModal'
 import {AppTextBold} from '../components/UI/AppTextBold'
 import {AppButton} from '../components/UI/AppButton'
 import {AntDesign, FontAwesome} from '@expo/vector-icons'
+import { TodoContext } from '../context/todo/TodoContext'
+import { ScreenContext } from '../context/screen/ScreenContext'
 
 
-export const TodoScreen = ({goBack, todo, removeTodo, changeTitle}) => {
+export const TodoScreen = () => {
+
+    const {todos, updateTodo, removeTodo} = useContext(TodoContext)
+
+    const {todoId, changeScreen} = useContext(ScreenContext)
 
     const [modal, setModal] = useState(false)
+
+    const todo = todos.find(t => t.id === todoId)
 
     const {id, title} = todo
 
     const saveHandler = titleInf => {
-        changeTitle(id, titleInf)
+        updateTodo(id, titleInf)
         setModal(false)
     }
 
     return (
         <View>
 
-            <EditModal value={todo.title} visible={modal} onCancel={() => setModal(false)} id={todo.id} changeTitle={saveHandler}  />
+            <EditModal 
+                value={todo.title} 
+                visible={modal} 
+                onCancel={() => setModal(false)} 
+                id={todo.id} 
+                changeTitle={saveHandler}  
+            />
 
-           <AppCard style={styles.card}>
-            <AppTextBold style={styles.text}>{title}</AppTextBold>
+           <AppCard 
+            style={styles.card}
+           >
+
+            <AppTextBold 
+            style={styles.text}>{title}</AppTextBold>
+
             {/* <Button title='Ред.' onPress={() => setModal(true)} /> */}
-            <AppButton onPress={() => setModal(true)}>
+            <AppButton 
+            onPress={() => setModal(true)}
+            >
+
                 <FontAwesome name='edit' size={20} color='#fff' />
+
             </AppButton>
+
            </AppCard>
+
             <View style={styles.buttons}>
                 <View style={styles.button}>
                     <AppButton 
-                    onPress={goBack} 
+                    onPress={() => changeScreen(null)} 
                     color={THEME.grayColor}
                     >
                         <AntDesign name='back' size={20} color='#fff' />

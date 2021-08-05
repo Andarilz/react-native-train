@@ -1,11 +1,17 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import {StyleSheet, View, FlatList, Text, Image, Dimensions} from 'react-native'
 import { AddToDo } from '../components/AddToDo'
 import { Todo } from '../components/Todo'
+import { ScreenContext } from '../context/screen/ScreenContext'
+import { TodoContext } from '../context/todo/TodoContext'
 import { THEME } from '../theme'
 
 
-export const MainScreen = ({handleText, state, removeTodo, openTodo}) => {
+export const MainScreen = () => {
+
+    const {addTodo, todos, removeTodo} = useContext(TodoContext)
+
+    const {changeScreen} = useContext(ScreenContext)
 
     const [deviseWidth, setDeviceWIdth] = useState(Dimensions.get('window').width - (THEME.paddingHorizontal * 2))
 
@@ -25,17 +31,17 @@ export const MainScreen = ({handleText, state, removeTodo, openTodo}) => {
     let content = (
     <View style={{ width: deviseWidth}}>
         <FlatList
-        data={state}
+        data={todos}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => {
             return (
-            <Todo todo={item} removeTodo={removeTodo} onOpen={openTodo} />)
+            <Todo todo={item} removeTodo={removeTodo} onOpen={changeScreen} />)
         }}
         />
     </View>
     )
 
-    if(state.length === 0){
+    if(todos.length === 0){
         content = <View style={styles.imageWrap}>
             {/* <Image style={styles.image} source={require('../img/Kakashi_Hatake.png')} /> */}
             <Image style={styles.image} source={{uri: 'https://c4.wallpaperflare.com/wallpaper/334/432/15/anime-naruto-hokage-naruto-minato-namikaze-wallpaper-preview.jpg'}} />
@@ -44,7 +50,7 @@ export const MainScreen = ({handleText, state, removeTodo, openTodo}) => {
 
     return (
         <View>
-            <AddToDo handleText={handleText} />
+            <AddToDo handleText={addTodo} />
             
             {content}
 
