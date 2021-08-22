@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react'
+import React, {useState, useEffect, useContext, useCallback} from 'react'
 import {StyleSheet, View, FlatList, Text, Image, Dimensions} from 'react-native'
 import { AddToDo } from '../components/AddToDo'
 import { Todo } from '../components/Todo'
@@ -9,11 +9,17 @@ import { THEME } from '../theme'
 
 export const MainScreen = () => {
 
-    const {addTodo, todos, removeTodo} = useContext(TodoContext)
+    const {addTodo, todos, removeTodo, fetchTodos, loading, error} = useContext(TodoContext)
 
     const {changeScreen} = useContext(ScreenContext)
 
     const [deviseWidth, setDeviceWIdth] = useState(Dimensions.get('window').width - (THEME.paddingHorizontal * 2))
+
+    const loadToos = useCallback(async () => await fetchTodos(), [fetchTodos])
+
+    useEffect(() => {
+        loadToos()
+    }, [])
 
     useEffect(() => {
         const update = () => {
